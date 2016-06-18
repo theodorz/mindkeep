@@ -1,43 +1,30 @@
 'use strict';
 console.log('Loading function');
 
-let uuid = require('uuid');
-let doc = require('dynamodb-doc');
-let dynamo = new doc.DynamoDB();
+let Q = require('q');
 
-var mindkeep = {};
-mindkeep.sessions = {};
-
-mindkeep.sessions.getOrCreate = function(id, callback) { 
-    if(id) {
-        dynamo.getItem({ 
-            TableName: 'mindkeep.sessions',
-            Key:  { id: id }
-        }, function(item) { 
-            console.log("Session created: " + JSON.stringify(item));
-            callback(item);
-        });
-    } else {
-        id = uuid.v1();
-        dynamo.getItem({ 
-            TableName: 'mindkeep.sessions',
-            Key:  { id: id, created: new Date() }
-        }, function(item) { 
-            console.log("Session created: " + JSON.stringify(item));
-            callback(item);
-        });
-    }
-};
+let SessionRepository = require('./repository.js');
+let Logger = require('../infrastructure/console-logger.js');
 
 exports.handler = (event, context, callback) => {
     console.log('Received event:', JSON.stringify(event, null, 2));
 
     var method = event.context["http-method"];
     var sessionId = event.sessionId;
+
+	var logger = new Logger();
+	console.log(logger);
+	logger.log('test');
+	var repository = new SessionRepository(logger);
+
+	return repository.getOrCreate(sessionId)
+		.then(callback)
+		.fail(callback);
+	
     
     if(method == "POST") {
         return mindkeep.sessions.getOrCreate(sessionId, function(item) { 
-            callback({
+            context.succeed({
                 session: item,
                 method: method,
                 time: new Date(),
@@ -83,6 +70,6 @@ exports.handler = (event, context, callback) => {
             callback(null, 'pong');
             break;
         default:
-            callback(new Error(`Unrecognized operation "${operation}"`));
+            callback(new Error("Unrecognized operation "));
     }
 };
