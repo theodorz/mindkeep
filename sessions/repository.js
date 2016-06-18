@@ -1,12 +1,12 @@
 'use strict'
 
-let doc = require('dynamodb-doc');
+let AWS = require('aws-sdk');
 let uuid = require('uuid');
 let Q = require('q');
 
 function DynamoSessionRepository(logger) {
 	this._logger = logger;
-	this._dynamo = new doc.DynamoDB();
+	this._dynamo = new AWS.DynamoDB.DocumentClient({ region: 'eu-west-1' });
 };
 
 DynamoSessionRepository.prototype.getOrCreate = function(id) { 
@@ -28,11 +28,10 @@ DynamoSessionRepository.prototype.getOrCreate = function(id) {
 		
 		logger.log('New sessiond id: ' + id);
         
-		this._dynamo.putItem({ 
+		this._dynamo.put({ 
             TableName: 'mindkeep.sessions',
             Item: item
-        }, function(error) { 
-			
+        }, function(error) {
 			if(error && error.statusCode != 200) { 
             	logger.log("Session error response: " + JSON.stringify(error));
 				return result.reject(error);

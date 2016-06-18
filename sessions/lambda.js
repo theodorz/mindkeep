@@ -13,13 +13,11 @@ exports.handler = (event, context, callback) => {
     var sessionId = event.sessionId;
 
 	var logger = new Logger();
-	console.log(logger);
-	logger.log('test');
 	var repository = new SessionRepository(logger);
 
 	return repository.getOrCreate(sessionId)
-		.then(callback)
-		.fail(callback);
+		.then(context.succeed)
+		.fail(context.fail);
 	
     
     if(method == "POST") {

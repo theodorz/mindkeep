@@ -1,5 +1,5 @@
 
-var lambda = require('./lambda.js')
+var lambda = require('./lambda.js');
 
 var event = { 
 	context : {
