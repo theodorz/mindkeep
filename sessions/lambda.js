@@ -10,12 +10,17 @@ exports.handler = (event, context, callback) => {
     console.log('Received event:', JSON.stringify(event, null, 2));
 
     var method = event.context["http-method"];
-    var sessionId = event.sessionId;
+    var sessionId = event['body-json'].sessionId;
+    var fbAuth = event['body-json'].fbAuth;
 
 	var logger = new Logger();
 	var repository = new SessionRepository(logger);
 
-	return repository.getOrCreate(sessionId)
+	if(fbAuth) { 
+		console.log('FB Auth received: ' + JSON.stringify(fbAuth));
+	}
+
+	return repository.resolve(sessionId, fbAuth)
 		.then(context.succeed)
 		.fail(context.fail);
 	

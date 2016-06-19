@@ -4,6 +4,7 @@
 	<title>MindKeep - Your personal knowledge database</title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" > </script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-cookies.min.js" > </script>	
 	<script src="/js/app.js" > </script>
 	<script src="/js/front-controller.js" > </script>
 	<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" ></link>
@@ -15,6 +16,13 @@
 		<div class="col-sm-12 text-center">
 			MindKeep
 		</div>
+	</div>
+	<div class="row">	
+		<div class="col-sm-12 text-center">
+			<fb:login-button show-faces="false" max-rows="1" size="large" scope="public_profile, email"></fb:login-button>
+			Session ID: {{session.id}}
+		</div>
+	</div>
 	</div>
 </body>
 </html>
