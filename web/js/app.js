@@ -1,24 +1,113 @@
-var app = angular.module('mindkeep', ['ngCookies']);
+var app = angular.module('mindkeep', ['ngCookies', 'ui.router']);
 
-app.run(function($http, $rootScope, $cookies) { 
+app.config(function($httpProvider) {
+    $httpProvider.defaults.headers.delete = { 'Content-Type' : 'application/json' };
+});
 
-	$rootScope.updateSession = function(data) {
-		var params = data ? data : {};
-		params.sessionId = $cookies.get('mk-session');
- 
-		$http.post('https://pm2xofozqg.execute-api.eu-west-1.amazonaws.com/prod/sessions', params)
-			.then(function(result) {
-				console.log(result);
-				$rootScope.session = result.data;
-				$cookies.put('mk-session', $rootScope.session.id);
+app.service('baseApi', function($http) {
+	var service = {
+		base: 'https://pm2xofozqg.execute-api.eu-west-1.amazonaws.com/prod'
+	};
+
+	service.get = function(path, params) {
+		params = params ? params : {};
+		return $http({ 
+			url: service.base + path, 
+			method: 'GET',
+			params: params
+		}).then(function(result) {
+			return result.data;
 		});
 	};
 
-	$rootScope.updateSession();	
+	service.post = function(path, params) {
+		params = params ? params : {};
+		return $http({
+			url: service.base + path, 
+			method: 'POST',
+			data: params
+		}).then(function(result) {
+			return result.data;
+		});
+	};
 
+	service.delete = function(path, params) {
+		params = params ? params : {};
+		return $http({
+			url: service.base + path, 
+			method: 'DELETE',
+			data: params
+		}).then(function(result) {
+			return result.data;
+		});
+	};
+	return service;
 });
 
-app.run(function($window, $rootScope) { 
+app.factory('auth', function(baseApi, $cookies, $q) {
+	var service = {};
+	var	sessionPromise = null;
+
+	var querySession = function(data) { 
+		var params = data ? data : {};
+		params.sessionId = $cookies.get('mk-session');
+ 
+		sessionPromise = baseApi.post('/sessions', params)
+		.then(function(session) { 
+			if(!session)
+				return null;
+			$cookies.put('mk-session', session.id);
+			service.session = session;
+			return session;
+		});
+
+		return sessionPromise;
+	};
+
+	service.getSession = function(data) {
+		if(!data && sessionPromise)
+			return sessionPromise;
+		return querySession(data);
+	};
+
+	service.logout = function() {
+		if(FB) FB.logout();
+		return querySession({ logout: true });
+	};
+
+	service.getUser = function() { 
+		return service.getSession()
+		.then(function(session) {
+			return session.user;
+		});
+	};
+
+	return service;	
+});
+
+app.factory('api', function(auth, baseApi) {
+	var service = {};
+
+	service.get = function(path, data) {
+		data = data ? data : {};
+		data.sessionId = auth.session.id; 
+		return baseApi.get(path, data);
+	};
+	service.post = function(path, data) { 
+		data = data ? data : {};
+		data.sessionId = auth.session.id; 
+		return baseApi.post(path, data);
+	};
+
+	service.delete = function(path, data) { 
+		data = data ? data : {};
+		data.sessionId = auth.session.id; 
+		return baseApi.delete(path, data);
+	};
+	return service;
+});
+
+app.run(function($window, auth) { 
 	$window.fbAsyncInit = function() {
 		FB.init({ 
 		  appId: '1732167897022532',
@@ -31,33 +120,17 @@ app.run(function($window, $rootScope) {
 		
 		FB.Event.subscribe('auth.authResponseChange', function(res) {
 
-			console.log(res);
-
 			if (res.status === 'connected') {
-				$rootScope.updateSession({ 
-					fbAuth : res.authResponse
+				auth.getUser().then(function(user) {
+					if(user)
+						return;
+					return auth.getSession({ 
+						fbAuth : res.authResponse
+					});
 				});
-				
-
-			  /*
-			   The user is already logged,
-			   is possible retrieve his personal info
-			  */
-			  //_self.getUserInfo();
-
-			  /*
-			   This is also the point where you should create a
-			   session for the current user.
-			   For this purpose you can use the data inside the
-			   res.authResponse object.
-			  */
 			}
 			else {
 
-			  /*
-			   The user is not logged to the app, or into Facebook:
-			   destroy the session on the server.
-			  */
 			}
 		});	
 	};
@@ -80,4 +153,49 @@ app.run(function($window, $rootScope) {
 
 	}(document));
 
+});
+
+app.config(function($stateProvider, $locationProvider) {
+  $stateProvider
+   .state('front', {
+    url: '/',
+    templateUrl: 'front.html',
+    controller: 'FrontController',
+    resolve: {
+      /*delay: function($q, $timeout) {
+        var delay = $q.defer();
+        $timeout(delay.resolve, 1000);
+        return delay.promise;
+      }*/
+    }
+  })
+  .state('app', { 
+    templateUrl: 'app.html',
+    controller: 'AppController',
+	resolve: { 
+		session: function(auth) {
+			return auth.getSession();
+		}
+	}
+  })
+  .state('app.start', {
+	url: '/start',
+	templateUrl: 'start.html'
+  })
+  .state('app.all', {
+	url: '/all'
+  })
+  .state('app.review', {
+	url: '/review'
+  })
+  .state('app.inbox', {
+	url: '/inbox'
+  })
+  .state('app.import', {
+	url: '/import',
+	templateUrl: 'import.html',
+	controller: 'ImportController'
+  });
+
+  $locationProvider.html5Mode(true);
 });

@@ -4,25 +4,32 @@
 	<title>MindKeep - Your personal knowledge database</title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" > </script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js" > </script>	
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-cookies.min.js" > </script>	
 	<script src="/js/app.js" > </script>
-	<script src="/js/front-controller.js" > </script>
-	<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" ></link>
-
+	<script src="/js/controllers/front.js" > </script>
+	<script src="/js/controllers/app.js" > </script>
+	<script src="/js/controllers/dashboard.js" > </script>
+	<script src="/js/controllers/import.js" > </script>
+	<script src="/js/controllers/main.js" > </script>
+	<script src="/js/reviews.js" > </script>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" ></link>
+	<link rel="stylesheet" type="text/css" href="/css/main.css" ></link>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"></link>
+	<base href="/" />
 </head>
-<body ng-app="mindkeep">
-	<div ng-controller="front-controller">
-	<div class="row">	
-		<div class="col-sm-12 text-center">
-			MindKeep
-		</div>
+<body ng-app="mindkeep" ng-controller="MainController">
+	<div class='debug-info'>
+		<div>Session ID: {{session.id}}</div>
+		<div ng-if="session.user"> {{session.user.name}} </div>
 	</div>
-	<div class="row">	
-		<div class="col-sm-12 text-center">
+	<header>
+		<div class="logo">MindKeep</div>
+		<div class="login">
 			<fb:login-button show-faces="false" max-rows="1" size="large" scope="public_profile, email"></fb:login-button>
-			Session ID: {{session.id}}
 		</div>
-	</div>
+	</header>
+	<div ui-view class="view-wrapper">
 	</div>
 </body>
 </html>

@@ -1,0 +1,55 @@
+
+<div> 
+	<div class="info">
+		<li class="fa fa-info-circle" />
+		Here you add imports from external data sources. Active imports are checked daily for new data to be added.
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<select ng-model="new.providerId">
+				<option value="">- Select -</option>
+				<option value="EVN">Evernote</option>
+			</select>
+		</div>
+		<div class="col-sm-8"> 
+			<input type="text" ng-model="new.filter.query" />
+		</div>
+		<div class="col-sm-2"> 
+			<button ng-click="create(new)" >Add</button>
+		</div>
+	</div>
+	<div class="list">
+	<div class="header row">
+		<div class="col-sm-4">
+			Service
+		</div>
+		<div class="col-sm-4">
+			Query
+		</div>
+		<div class="col-sm-2">
+			Active
+		</div>
+		<div class="col-sm-2">
+		</div>
+	</div>
+	<div ng-repeat="item in imports" class="item row">
+		<div class="col-sm-4">
+			<img class="provider" ng-src="{{providers[item.providerId].logoUrl}}" />
+		</div>
+		<div class="col-sm-4">
+			<span ng-if="item.filter.query">
+				{{item.filter.query}}
+			</span>
+			<span ng-if="!item.filter.query">
+				* All notes *
+			</span>
+		</div>
+		<div class="col-sm-2">
+			<input type="checkbox" ng-model="item.active" />
+		</div>
+		<div class="col-sm-2">
+			<li class="fa fa-times remove" ng-click="remove(item)"> </li>
+		</div>
+	</div>
+	</div>
+</div>

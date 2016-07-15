@@ -1,0 +1,7 @@
+cd ../../
+
+zip sessions.lambda.zip -r node_modules lambda repositories infrastructure external
+
+aws lambda update-function-code --function-name mindkeep-api-session --zip-file fileb://sessions.lambda.zip
+
+rm sessions.lambda.zip

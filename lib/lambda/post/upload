@@ -1,0 +1,8 @@
+
+cd ../../
+
+zip lambda.zip -r lambda external node_modules repositories infrastructure 
+
+aws lambda update-function-code --function-name mindkeep-api-posts --zip-file fileb://lambda.zip
+
+rm lambda.zip

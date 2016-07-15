@@ -1,0 +1,9 @@
+cd ../../
+
+zip evernote.lambda.zip -r lambda external node_modules repositories infrastructure 
+
+aws lambda update-function-code --function-name mindkeep-api-evernote-login --zip-file fileb://evernote.lambda.zip
+
+aws lambda update-function-code --function-name mindkeep-api-evernote-callback --zip-file fileb://evernote.lambda.zip
+
+rm evernote.lambda.zip
