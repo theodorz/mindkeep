@@ -1,8 +1,19 @@
 
-<div> 
+<div class="list"> 
+	<div class="row header">
+		<div class="col-sm-12" >
+			Title
+		</div>
+	</div>
 	<div class="row" ng-repeat="item in items">
-		<div class="col-sm-12"> 
+		<div class="col-sm-8"> 
 			{{item.title}}
+		</div>
+		<div class="col-sm-2"> 
+			{{item.created}}
+		</div>
+		<div class="col-sm-2"> 
+			{{item.source}}
 		</div>
 	</div>
 </div>

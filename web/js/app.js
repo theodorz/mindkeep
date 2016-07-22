@@ -184,6 +184,7 @@ app.config(function($stateProvider, $locationProvider) {
   })
   .state('app.all', {
 	url: '/all',
+	templateUrl: 'all.html',
 	controller: 'AllController'
   })
   .state('review', {

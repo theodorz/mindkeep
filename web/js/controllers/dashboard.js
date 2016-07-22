@@ -4,7 +4,10 @@ var app = angular.module('mindkeep');
 app.controller('AllController', function($scope, api) {
 	
 	$scope.refresh = function() {
-		api.get('/posts', { active: true }).then(function(items) {
+		api.get('/posts', { 
+			//active: true,
+			type: 'note'
+		}).then(function(items) {
 			$scope.items = items;
 		}, $scope.onError.bind($scope));
 	};
