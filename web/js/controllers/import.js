@@ -1,7 +1,7 @@
 
 var app = angular.module('mindkeep');
 
-app.controller('ImportController', function($scope, api, reviews) {
+app.controller('ImportController', function($scope, api, reviewService) {
 
 	$scope.providers = {
 		'EVN': {
@@ -19,7 +19,7 @@ app.controller('ImportController', function($scope, api, reviews) {
 		item.active = true;
 		item.createProps = { 
 			reviewStage: 0, 
-			nextReviewDate: reviews.getNext(0, new Date()) 
+			nextReviewDate: reviewService.getNext(0, new Date()) 
 		};
 		api.post('/imports', item)
 		.then(function(result) {

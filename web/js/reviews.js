@@ -1,6 +1,6 @@
 var app = angular.module('mindkeep');
 
-app.factory('reviews', function() { 
+app.factory('reviewService', function() { 
 	var service = {};
 	
 	var dayMs = 1000 * 60 * 60 * 24; 

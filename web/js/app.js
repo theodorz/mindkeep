@@ -183,10 +183,13 @@ app.config(function($stateProvider, $locationProvider) {
 	templateUrl: 'start.html'
   })
   .state('app.all', {
-	url: '/all'
+	url: '/all',
+	controller: 'AllController'
   })
-  .state('app.review', {
-	url: '/review'
+  .state('review', {
+	url: '/review',
+	templateUrl: 'review.html',
+	controller: 'ReviewController'
   })
   .state('app.inbox', {
 	url: '/inbox'
