@@ -1,28 +1,25 @@
 <div class="review">
 
-	<div class="row" ng-if="items.length">
-		<div class="col-xs-4 pre">
-			<div view-note="items[currentIndex-1]"> </div>
+	<div class="" ng-if="items.length">
+		<div class="review-note pre" >
+			<div ng-if="currentIndex >= 1" view-note="items[currentIndex-1]"> </div>
 		</div>
-		<div class="col-xs-4 current">
-			<div class="row">
-				<div class="col-xs-12">
-					<div view-note="items[currentIndex]"> </div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-2" >
-					<span class="fa fa-times" ng-click="eval(1)" tooltip="Í seem to remember this, remind me again longer in the future ({{getReviewDate(1) | date:'yyyy-MM-dd'}})"></span>
-				</div>
-				<div class="col-xs-8">
-				</div>
-				<div class="col-xs-2" >
-					<span class="fa fa-check" ng-click="eval(-1)" tooltip="Didn't really remember this so well, remind me again sooner than this time ({{getReviewDate(-1) | date:'yyyy-MM-dd'}})"></span>
-				</div>
-			</div>
+		<div class="review-note current">
+			<div view-note="items[currentIndex]"> </div>
+			<ul class="stage">
+				<li class="action no" >
+					<span class="fa fa-times" ng-click="eval(-1)" tooltip="Didn't really remember this so well, remind me again sooner than this time ({{getReviewDate(-1) | date:'yyyy-MM-dd'}})"></span>
+				</li>
+				<li class="action skip">
+					<span class="fa fa-skip" ng-click="eval(0)" tooltip="Didn't really remember this so well, remind me again sooner than this time ({{getReviewDate(-1) | date:'yyyy-MM-dd'}})"></span>
+				</li>
+				<li class="action yes" >
+					<span class="fa fa-check" ng-click="eval(1)" tooltip="Í seem to remember this, remind me again longer in the future ({{getReviewDate(1) | date:'yyyy-MM-dd'}})"></span>
+				</li>
+			</ul>
 		</div>
-		<div class="col-xs-4 next">
-			<div view-note="items[currentIndex+1]"> </div>
+		<div class="review-note next" >
+			<div ng-if="currentIndex < items.length-1" view-note="items[currentIndex+1]"> </div>
 		</div>
 	</div>
 

@@ -1,7 +1,7 @@
 
 .front .title { font-size: 22px; font-weight:bold; }
 
-.debug-info { position:absolute; right:0px; bottom:0px; width: 300px; background:rgba(255,255,255,0.5); border: 1px dotted black; }
+.debug-info { position:fixed; right:0px; bottom:0px; width: 300px; background:rgba(255,255,255,0.5); border: 1px dotted black; background-color:#EEE; z-index:999; }
 
 header { height:50px; border-bottom: 1px solid #444; z-index:2; position:relative; }
 header .logo { padding:10px; font-size:20px; font-weight:normal; display:inline-block;}
@@ -34,3 +34,18 @@ html, body, .view-wrapper {  }
 
 .info { padding: 10px; border: 1px solid gray; background-color:#EEE; margin-bottom:20px; }
 
+.review .review-note { display:inline-block; vertical-align:top; padding:10px; }
+.review .current { width:50%; }
+.review .pre, .review .next { width: 20%; /*transform: scale(0.7);*/ }
+.review .view-note .content { min-height:100px; max-height: calc(70vh - 20px); overflow:hidden; -webkit-filter:blur(5px); }
+.review .stage { text-align:justify; list-style-type:none; margin:0; padding:0; }
+.review .stage:after { content:''; width:100%; display:inline-block;}
+.review .stage .action { display:inline-block; vertical-align: top; font-size:3em; cursor:pointer; }
+.review .stage .no { text-align:left; }
+.review .stage .yes { text-align:right; }
+.review .stage .skip { text-align:center; }
+
+.view-note { border: 1px solid lightgray; }
+.view-note .title { padding:5px; font-size:1.5em; }
+.view-note .content { border-top: 1px solid lightgray; }
+.view-note .created { padding:5px; font-style:italic; }

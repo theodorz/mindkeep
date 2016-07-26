@@ -20,23 +20,25 @@ app.service('baseApi', function($http) {
 		});
 	};
 
-	service.post = function(path, params) {
+	service.post = function(path, params, body) {
 		params = params ? params : {};
 		return $http({
 			url: service.base + path, 
 			method: 'POST',
-			data: params
+			data: body,
+			params: params
 		}).then(function(result) {
 			return result.data;
 		});
 	};
 
-	service.delete = function(path, params) {
+	service.delete = function(path, params, body) {
 		params = params ? params : {};
 		return $http({
 			url: service.base + path, 
 			method: 'DELETE',
-			data: params
+			params: params,
+			data: body
 		}).then(function(result) {
 			return result.data;
 		});
@@ -52,7 +54,7 @@ app.factory('auth', function(baseApi, $cookies, $q) {
 		var params = data ? data : {};
 		params.sessionId = $cookies.get('mk-session');
  
-		sessionPromise = baseApi.post('/sessions', params)
+		sessionPromise = baseApi.post('/sessions', null, params)
 		.then(function(session) { 
 			if(!session)
 				return null;
@@ -95,14 +97,14 @@ app.factory('api', function(auth, baseApi) {
 	};
 	service.post = function(path, data) { 
 		data = data ? data : {};
-		data.sessionId = auth.session.id; 
-		return baseApi.post(path, data);
+		var params = { sessionId : auth.session.id };
+		return baseApi.post(path, params, data);
 	};
 
 	service.delete = function(path, data) { 
 		data = data ? data : {};
-		data.sessionId = auth.session.id; 
-		return baseApi.delete(path, data);
+		var params = { sessionId : auth.session.id };
+		return baseApi.delete(path, params, data);
 	};
 	return service;
 });

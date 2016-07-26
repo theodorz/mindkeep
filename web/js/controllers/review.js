@@ -28,13 +28,15 @@ app.controller('ReviewController', function($scope, api, reviewService) {
 		var date = new Date();
 		var note = $scope.items[$scope.currentIndex];
 		var nextStage = note.reviewStage + val;
-		nextStage = nextStage < 0 ? 0 :
+		nextStage = nextStage < 1 ? 1 : nextStage;
+		var nextReviewDate = reviewService.getNext(nextStage, date);
+		console.log(nextReviewDate);
 		api.post('/posts/' + note.id, {
 			reviewStage: nextStage,
 			reviewDate: date.getTime(),
-			nextReviewDate: reviewService.getNext(nextStage, date)
+			nextReviewDate: nextReviewDate
 		}).then(function(result) {
-		
+			console.log(result);
 			if(result)
 				$scope.currentIndex++;
 		});

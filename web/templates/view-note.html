@@ -1,25 +1,17 @@
 <div class="view-note">
 
-	<div class="row">
-		<div class="col-xs-12 title">
-			{{item.title}}
-		</div>
+	<div class="title">
+		{{item.title}}
 	</div>
-	<div class="row" >
-		<div class="col-xs-12 created">
-			<span class="fa fa-clock" ></span>
-			{{item.created | date:'yyyy-MM-dd HH:ss'}}
-		</div>
+	<div class="created" >
+		<span class="fa fa-clock" ></span>
+		{{item.created | date:'yyyy-MM-dd HH:ss'}}
 	</div>
-	<div class="row" ng-if="item.url">
-		<div class="col-xs-12 url">
-			<span class="fa fa-link" ></span>
-			{{item.url}}
-		</div>
+	<div class="url" ng-if="item.url">
+		<span class="fa fa-link" ></span>
+		{{item.url}}
 	</div>
-	<div class="row"> 
-		<div class="col-xs-12 content">
-			<div ng-bind-html="item.content"> </div>
-		</div>
+	<div class="content"> 
+		<div ng-bind-html="content"> </div>
 	</div>
 </div>
