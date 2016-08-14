@@ -1,7 +1,7 @@
 
 var app = angular.module('mindkeep');
 
-app.controller('ImportController', function($scope, api, reviewService) {
+app.controller('ImportController', function($scope, $window, api, reviewService) {
 
 	$scope.providers = {
 		'EVN': {
@@ -9,8 +9,8 @@ app.controller('ImportController', function($scope, api, reviewService) {
 		}
 	};
 	$scope.refresh = function() {
-		api.get('/imports').then(function(items) {
-			$scope.imports = items;
+		api.get('/imports').then(function(result) {
+			$scope.imports = result.items;
 		}, $scope.onError.bind($scope));
 	};
 
@@ -21,7 +21,7 @@ app.controller('ImportController', function($scope, api, reviewService) {
 			reviewStage: 0, 
 			nextReviewDate: reviewService.getNext(0, new Date()) 
 		};
-		api.post('/imports', item)
+		api.put('/imports', item)
 		.then(function(result) {
 			if(result.errorMessage)
 				throw result.errorMessage;
@@ -36,6 +36,23 @@ app.controller('ImportController', function($scope, api, reviewService) {
 				throw result.errorMessage;
 			$scope.refresh();
 		}, $scope.onError.bind($scope));
+	};
+
+	$scope.connectEvernote = function() { 
+		var params = {
+			callback: api.base + '/integrations/evernote/callback?sessionId=' + $scope.session.id,
+			sessionId: $scope.session.id
+		};
+		console.log(params);
+		api.get('/integrations/evernote/login', params)
+			.then(function(result) { 
+				if(result) 
+					$window.location.href = result;
+				else
+					console.log('Invalid response');
+			}, function(error) {
+				console.log('Failed to get evernote login URL: ' + JSON.stringify(error));
+			});
 	};
 
 	$scope.refresh();

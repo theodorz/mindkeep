@@ -34,18 +34,22 @@ html, body, .view-wrapper {  }
 
 .info { padding: 10px; border: 1px solid gray; background-color:#EEE; margin-bottom:20px; }
 
-.review .review-note { display:inline-block; vertical-align:top; padding:10px; }
+.review .review-note { display:inline-block; vertical-align:top; padding:10px; position:relative; }
 .review .current { width:50%; }
 .review .pre, .review .next { width: 20%; /*transform: scale(0.7);*/ }
-.review .view-note .content { min-height:100px; max-height: calc(70vh - 20px); overflow:hidden; -webkit-filter:blur(5px); }
+.review .view-note .content { min-height:100px; max-height: calc(70vh - 20px); overflow:hidden;  }
+.review .blur .content { -webkit-filter:blur(5px); }
 .review .stage { text-align:justify; list-style-type:none; margin:0; padding:0; }
 .review .stage:after { content:''; width:100%; display:inline-block;}
 .review .stage .action { display:inline-block; vertical-align: top; font-size:3em; cursor:pointer; }
 .review .stage .no { text-align:left; }
 .review .stage .yes { text-align:right; }
 .review .stage .skip { text-align:center; }
+.review .reveal-help { z-index: 99; text-align:center; position:absolute; width:100%; top:40%; }
 
 .view-note { border: 1px solid lightgray; }
 .view-note .title { padding:5px; font-size:1.5em; }
 .view-note .content { border-top: 1px solid lightgray; }
 .view-note .created { padding:5px; font-style:italic; }
+
+.key { border:1px solid black; background-color:gray; color:white; padding: 2px; }

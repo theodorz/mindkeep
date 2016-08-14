@@ -32,6 +32,18 @@ app.service('baseApi', function($http) {
 		});
 	};
 
+	service.put = function(path, params, body) {
+		params = params ? params : {};
+		return $http({
+			url: service.base + path, 
+			method: 'PUT',
+			data: body,
+			params: params
+		}).then(function(result) {
+			return result.data;
+		});
+	};
+
 	service.delete = function(path, params, body) {
 		params = params ? params : {};
 		return $http({
@@ -89,6 +101,7 @@ app.factory('auth', function(baseApi, $cookies, $q) {
 
 app.factory('api', function(auth, baseApi) {
 	var service = {};
+	service.base = baseApi.base;
 
 	service.get = function(path, data) {
 		data = data ? data : {};
@@ -99,6 +112,12 @@ app.factory('api', function(auth, baseApi) {
 		data = data ? data : {};
 		var params = { sessionId : auth.session.id };
 		return baseApi.post(path, params, data);
+	};
+
+	service.put = function(path, data) { 
+		data = data ? data : {};
+		var params = { sessionId : auth.session.id };
+		return baseApi.put(path, params, data);
 	};
 
 	service.delete = function(path, data) { 
@@ -182,7 +201,8 @@ app.config(function($stateProvider, $locationProvider) {
   })
   .state('app.start', {
 	url: '/start',
-	templateUrl: 'start.html'
+	templateUrl: 'start.html',
+	controller: 'StartController'
   })
   .state('app.all', {
 	url: '/all',
@@ -205,3 +225,18 @@ app.config(function($stateProvider, $locationProvider) {
 
   $locationProvider.html5Mode(true);
 });
+
+app.directive('keypressEvents', [ '$document','$rootScope', function($document, $rootScope) {
+	var handler = function(e) {
+		$rootScope.$broadcast('keypress', e.which);
+		$rootScope.$broadcast('keypress:' + e.which, e);
+	};
+	return {
+		restrict: 'A',
+		link: function() {
+			$document.unbind('keyup', handler);
+			$document.bind('keyup', handler);
+		}
+  };
+}
+]);

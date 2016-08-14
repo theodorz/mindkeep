@@ -4,6 +4,11 @@
 		<li class="fa fa-info-circle" />
 		Here you add imports from external data sources. Active imports are checked daily for new data to be added.
 	</div>
+	<div class="import-service evernote">
+		<div ng-if="session.user"> You have enabled access to your Evernote account until: {{session.user.evernote.authorizeExpiration}}
+		</div>
+		<button type="button" ng-click="connectEvernote()" > Connect Evernote </button>
+	</div>
 	<div class="row">
 		<div class="col-sm-2">
 			<select ng-model="new.providerId">

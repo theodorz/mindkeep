@@ -13,6 +13,7 @@
 	<script src="/js/controllers/import.js" > </script>
 	<script src="/js/controllers/main.js" > </script>
 	<script src="/js/controllers/review.js" > </script>
+	<script src="/js/controllers/start.js" > </script>
 	<script src="/js/services/reviews.js" > </script>
 	<script src="/js/directives/view-note.js" > </script>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" ></link>
@@ -28,10 +29,16 @@
 	<header>
 		<div class="logo">MindKeep</div>
 		<div class="login">
-			<fb:login-button show-faces="false" max-rows="1" size="large" scope="public_profile, email"></fb:login-button>
+			<div ng-if="session.user">
+				{{session.user.name}}
+				<button ng-click="logout()">Logout</button>
+			</div>
+			<div ng-if="!session.user">
+				<fb:login-button show-faces="false" max-rows="1" size="large" scope="public_profile, email"></fb:login-button>
+			</div>
 		</div>
 	</header>
-	<div ui-view class="view-wrapper">
+	<div ui-view class="view-wrapper" keypress-events>
 	</div>
 </body>
 </html>

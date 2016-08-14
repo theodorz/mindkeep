@@ -9,8 +9,9 @@ app.controller('ReviewController', function($scope, api, reviewService) {
 		api.get('/posts', {
 			type: 'note',
 			nextReviewDate: '<' + time 
-		}).then(function(items) {
-			$scope.items = items;
+		}).then(function(result) {
+			$scope.total = result.total;
+			$scope.items = result.items;
 		});
 	};
 
@@ -41,4 +42,11 @@ app.controller('ReviewController', function($scope, api, reviewService) {
 				$scope.currentIndex++;
 		});
 	};
+
+	$scope.$on('keypress', function(event, keyCode) {
+		if(keyCode == 32) {
+			$scope.items[$scope.currentIndex].show = !$scope.items[$scope.currentIndex].show;
+			console.log($scope.items[$scope.currentIndex].show);
+		}
+	});
 });

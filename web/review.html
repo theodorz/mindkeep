@@ -1,10 +1,14 @@
-<div class="review">
+<div class="review" ng-keyup="onKeyUp($event.keyCode)">
 
 	<div class="" ng-if="items.length">
-		<div class="review-note pre" >
+		<div class="review-note pre blur" >
 			<div ng-if="currentIndex >= 1" view-note="items[currentIndex-1]"> </div>
 		</div>
-		<div class="review-note current">
+		<div class="review-note current" ng-class="{ blur: !items[currentIndex].show }">
+			<div class="reveal-help" ng-if="!items[currentIndex].show">
+				Reveal content <br />
+				<span class="key"> SPACE </span>
+			</div>
 			<div view-note="items[currentIndex]"> </div>
 			<ul class="stage">
 				<li class="action no" >
@@ -18,7 +22,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="review-note next" >
+		<div class="review-note next blur" >
 			<div ng-if="currentIndex < items.length-1" view-note="items[currentIndex+1]"> </div>
 		</div>
 	</div>

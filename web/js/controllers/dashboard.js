@@ -7,8 +7,9 @@ app.controller('AllController', function($scope, api) {
 		api.get('/posts', { 
 			//active: true,
 			type: 'note'
-		}).then(function(items) {
-			$scope.items = items;
+		}).then(function(result) {
+			$scope.items = result.items;
+			$scope.total = result.total;
 		}, $scope.onError.bind($scope));
 	};
 
